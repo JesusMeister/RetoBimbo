@@ -1,0 +1,12 @@
+names:
+- box
+nc: 1
+roboflow:
+  license: Public Domain
+  project: box-segmentation-jdd1s
+  url: https://universe.roboflow.com/box-tbgxq/box-segmentation-jdd1s/dataset/1
+  version: 1
+  workspace: box-tbgxq
+test: /Users/meister/Desktop/RetoBimbo/Box-Counting-Model/Box-segmentation-1/test/images
+train: /Users/meister/Desktop/RetoBimbo/Box-Counting-Model/Box-segmentation-1/train/images
+val: /Users/meister/Desktop/RetoBimbo/Box-Counting-Model/Box-segmentation-1/valid/images

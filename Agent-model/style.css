@@ -1,0 +1,37 @@
+QMainWindow {
+    background-color: #f8f9fa;
+}
+
+QTextEdit {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #495057;
+}
+
+QLineEdit {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #495057;
+}
+
+QPushButton {
+    background-color: #ff0000; /* Color rojo de Bimbo */
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+QPushButton:hover {
+    background-color: #cc0000; /* Color rojo oscuro al pasar el mouse */
+}

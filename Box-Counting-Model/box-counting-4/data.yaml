@@ -1,0 +1,12 @@
+names:
+- cardboxes
+nc: 1
+roboflow:
+  license: CC BY 4.0
+  project: box-counting
+  url: https://universe.roboflow.com/counting-ai/box-counting/dataset/4
+  version: 4
+  workspace: counting-ai
+test: /Users/meister/Downloads/box-counting-4/test/images
+train: /Users/meister/Downloads/box-counting-4/train/images
+val: /Users/meister/Downloads/box-counting-4/valid/images

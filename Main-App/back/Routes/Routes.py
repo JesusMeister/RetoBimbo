@@ -47,6 +47,7 @@ def cluster(n):
 
     labels = agg_clustering.labels_
     df_2D['Cluster'] = labels
+    df_2D['Cluster'] = df_2D['Cluster'] + 1
 
 import random
 class AntColonyOptimization:
@@ -124,15 +125,14 @@ def get_best_route(n):
             distance = np.linalg.norm(coordinates[i] - coordinates[j])
             distances[i, j] = distances[j, i] = distance
 
-    aco = AntColonyOptimization(distances, n_ants=10, n_iterations=100)
+    aco = AntColonyOptimization(distances, n_ants=20, n_iterations=500)
     best_path = aco.run()
 
-    route = cluster_n_df.iloc[best_path][['Rack', 'Columna']].values
+    route = cluster_n_df.iloc[best_path][['Rack', 'Columna', 'Cantidad']].values
 
-    data = [{'Index': index, 'Rack': item[0], 'Columna': item[1]} for index, item in enumerate(route)]
+    data = [{'Index': index, 'Rack': item[0], 'Columna': item[1], 'Cantidad': item[2]} for index, item in enumerate(route)]
 
     return data
-
 
 app = Flask(__name__)
 CORS(app)

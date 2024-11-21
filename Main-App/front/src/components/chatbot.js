@@ -62,42 +62,53 @@ const BimboChatBot = () => {
   };
 
   return (
-    <div>
-    <div className="text-2xl font-bold text-left rounded-t-lg text-white bg-blue-800 p-4">Chat Bimbot</div>
-    <div className="bg-white shadow-md rounded-b-lg p-6 max-w-md mx-auto">
-      <div className="bg-gray-100 p-4 mt-4 h-64 overflow-y-auto rounded-md">
+    <div className="max-w-2xl mx-auto rounded-lg p-4">
+      <div className="bg-gray-50 p-4 h-64 overflow-y-auto rounded-md shadow-inner">
         {messages.map((message, index) => (
-          <div key={index} className={`my-2 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
-            <div className={`inline-block p-2 rounded-lg ${message.role === 'user' ? 'bg-blue-800 text-white' : 'bg-gray-200 text-black'}`}>
+          <div
+            key={index}
+            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} my-2`}>
+            <div
+              className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${
+                message.role === 'user'
+                  ? 'bg-gradient-to-r from-blue-800 to-blue-600 text-white shadow-md'
+                  : 'bg-gray-200 text-black'
+              }`}>
               {message.content}
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="text-gray-500 text-sm italic">Escribiendo...</div>
+          <div className="text-gray-500 text-sm italic text-center mt-2">
+            Escribiendo...
+          </div>
         )}
         <div ref={messagesEndRef}></div>
       </div>
+      
       <form onSubmit={handleSubmit} className="flex mt-4">
         <input
           type="text"
           value={question}
           onChange={handleInputChange}
           placeholder="Haz una pregunta..."
-          className="w-full border rounded-l-lg p-2 focus:outline-none"/>
+          className="w-full border border-gray-300 rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
         <button
           type="submit"
-          className="bg-blue-800 text-white px-4 rounded-r-lg hover:bg-blue-600 transition duration-300 font-bold"
+          className="bg-gradient-to-r from-blue-800 to-blue-600 via-blue-700 text-white px-4 rounded-r-lg hover:from-blue-700 hover:to-red-500 transition duration-300 font-bold"
           disabled={isLoading}>
           Enviar
         </button>
       </form>
-      <div className='p-4 text-center'>
-        <button className="bg-blue-800 text-white px-4 p-2 rounded-lg hover:bg-blue-600 transition duration-300 font-bold" onClick={handleReset}>
-        Reiniciar chat
+      
+      <div className="text-center mt-4">
+        <button
+          className="bg-gradient-to-r from-blue-800 to-blue-600 via-blue-700 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-red-500 transition duration-300 font-bold shadow-md"
+          onClick={handleReset}>
+          Reiniciar Chat
         </button>
       </div>
-    </div>
     </div>
   );
 };

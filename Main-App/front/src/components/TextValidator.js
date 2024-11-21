@@ -45,7 +45,7 @@ const TextValidator = ({ texts, onComplete }) => {
   return (
     <div className="p-4 flex flex-col w-96">
       <input type="file" onChange={handleImageChange} className="mb-4 p-4" />
-      <button onClick={validateNextText} className="mb-4 p-2 bg-blue-800 text-white rounded" disabled={loading}>
+      <button onClick={validateNextText} className="m-4 bg-gradient-to-r from-blue-800 to-red-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-red-500 transition duration-300 font-bold shadow-md" disabled={loading}>
         {loading ? 'Validando...' : 'Validar Siguiente Ubicación'}
       </button>
       <ul>

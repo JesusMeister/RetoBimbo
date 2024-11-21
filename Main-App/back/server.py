@@ -20,7 +20,10 @@ def post_get_clustered_dataframe():
     n = data.get('n')
     n = int(n)
     cluster(n)
-    return jsonify(df_2D.to_dict(orient='records'))
+    df_cluster_sum = df_2D.groupby('Cluster')['Cantidad'].sum().reset_index()
+    df_cluster_sum = df_cluster_sum.sort_values(by='Cantidad', ascending=False)
+    df_cluster_sum = df_cluster_sum.reset_index(drop=True)
+    return jsonify({"data": df_2D.to_dict(orient='records'), "quantities": df_cluster_sum.to_dict(orient='records')})
 
 @app.route('/get_best_route', methods=['POST'])
 def post_tuples():
@@ -37,9 +40,7 @@ def ask_question():
     data = request.get_json()
     print(data)
     question = data.get('question')
-    
     answer = da.ask_question(question)
-    
     return jsonify({'answer': answer})
 
 @app.route('/reset_memory', methods=['GET'])
@@ -49,10 +50,8 @@ def reset_memory():
 
 @app.route('/check_image', methods=['POST'])
 def upload_file():
-
     text = request.form.get('text')
     image_file = request.files.get('image')
-    
     if image_file:
         image = Image.open(io.BytesIO(image_file.read()))
         np_img = np.array(image)

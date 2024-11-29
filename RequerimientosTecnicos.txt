@@ -1,9 +1,27 @@
 Hardware:
-
-
+1. Procesador (CPU):
+Recomendación: Procesador multinúcleo con alto rendimiento por núcleo.
+Mínimo: Intel Core i5 de 10ª generación o AMD Ryzen 5 3600.
+Recomendado: Intel Core i7/i9 de 11ª generación o superior, o AMD Ryzen 7 5800X o superior.
+2. Memoria RAM:
+Mínimo: 8 GB de RAM.
+Recomendado: 16 GB de RAM o más.
+3. Tarjeta Gráfica (GPU):
+Mínimo: NVIDIA GTX 1650 o similar.
+Recomendado: NVIDIA RTX 3060 o superior.
+5. Conexión a Internet:
+Recomendación: Conexión de banda ancha estable.
+6. Sistema Operativo:
+Recomendación:
+Windows 10/11, Linux (Ubuntu 20.04 o superior), o macOS actualizado.
+Motivo: Compatibilidad con las herramientas de desarrollo, bibliotecas y entornos necesarios para la implementación.
 
 Back-End:
-
-
+Python 3.12.7
+API Key de GroqCloud
+Acceso a los servicios de Oracle Cloud Infrastructure
+Librerías indicadas en requirements.txt
 
 Front-End:
+Node JS npm
+Liberías y dependencias indicadas en package.json

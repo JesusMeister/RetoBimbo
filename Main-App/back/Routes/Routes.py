@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import AgglomerativeClustering 
+from sklearn.cluster import KMeans
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -42,24 +43,38 @@ def cluster(n):
 
     X = df_2D[['Rack_pos', 'Columna']]
     
-    agg_clustering = AgglomerativeClustering(n_clusters=n)
-    agg_clustering.fit(X)
+    kmeans = KMeans(n_clusters=n)
 
-    labels = agg_clustering.labels_
-    df_2D['Cluster'] = labels
+    df_2D['Cluster'] = kmeans.fit_predict(X)
     df_2D['Cluster'] = df_2D['Cluster'] + 1
+
+
+def distance(a, b):
+    x1, x2 = a.iloc[0], b.iloc[0]
+    y1, y2 = a.iloc[1], b.iloc[1]
+    return np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 import random
 class AntColonyOptimization:
-    def __init__(self, distances, n_ants, n_iterations, alpha=1, beta=1, rho=0.5, q=1):
-        self.distances = distances
+    def __init__(self, df, n_ants, n_iterations, alpha=1, beta=1, rho=0.5, q=1):
+        self.df = df
         self.n_ants = n_ants
         self.n_iterations = n_iterations
         self.alpha = alpha
         self.beta = beta
         self.rho = rho
         self.q = q
-        self.pheromone = np.ones_like(distances) / len(distances)
+        self.pheromone = np.ones((len(df), len(df)))
+        self.distances = self.calculate_distances()
+
+    def calculate_distances(self):
+        distances = np.zeros((len(self.df), len(self.df)))
+        for i in range(len(self.df)):
+            for j in range(len(self.df)):
+                a = self.df[['Rack_pos', 'Columna']].iloc[i]
+                b = self.df[['Rack_pos', 'Columna']].iloc[j]
+                distances[i, j] = distance(a, b)
+        return distances
 
     def run(self):
         best_path = None
@@ -76,11 +91,11 @@ class AntColonyOptimization:
         return best_path
 
     def find_path(self):
-        current_node = random.randint(0, len(self.distances) - 1)
+        current_node = random.randint(0, len(self.df) - 1)
         path = [current_node]
         visited = set([current_node])
         distance = 0
-        while len(visited) < len(self.distances):
+        while len(visited) < len(self.df):
             probabilities = self.calculate_probabilities(current_node, visited)
             next_node = self.choose_next_node(probabilities)
             path.append(next_node)
@@ -91,7 +106,7 @@ class AntColonyOptimization:
 
     def calculate_probabilities(self, current_node, visited):
         probabilities = []
-        for next_node in range(len(self.distances)):
+        for next_node in range(len(self.df)):
             if next_node not in visited:
                 pheromone = self.pheromone[current_node][next_node]
                 distance = self.distances[current_node][next_node]
@@ -100,14 +115,10 @@ class AntColonyOptimization:
         return probabilities
 
     def choose_next_node(self, probabilities):
-        total_prob = sum([prob for _, prob in probabilities])
-        random_value = random.uniform(0, total_prob)
-        current_prob = 0
-        for node, prob in probabilities:
-            current_prob += prob
-            if current_prob >= random_value:
-                return node
-        return probabilities[-1][0] 
+        nodes, weights = zip(*probabilities)
+        total_weight = sum(weights)
+        probabilities = [weight / total_weight for weight in weights]
+        return random.choices(nodes, weights=probabilities, k=1)[0]
 
     def update_pheromone(self, paths):
         self.pheromone *= (1 - self.rho)
@@ -117,15 +128,8 @@ class AntColonyOptimization:
 
 def get_best_route(n):
     cluster_n_df = df_2D[df_2D['Cluster'] == n]
-    coordinates = cluster_n_df[['Rack_pos', 'Columna']].values
 
-    distances = np.zeros((len(coordinates), len(coordinates)))
-    for i in range(len(coordinates)):
-        for j in range(i + 1, len(coordinates)):
-            distance = np.linalg.norm(coordinates[i] - coordinates[j])
-            distances[i, j] = distances[j, i] = distance
-
-    aco = AntColonyOptimization(distances, n_ants=20, n_iterations=500)
+    aco = AntColonyOptimization(cluster_n_df, n_ants=100, n_iterations=500)
     best_path = aco.run()
 
     route = cluster_n_df.iloc[best_path][['Rack', 'Columna', 'Cantidad']].values
@@ -133,30 +137,3 @@ def get_best_route(n):
     data = [{'Index': index, 'Rack': item[0], 'Columna': item[1], 'Cantidad': item[2]} for index, item in enumerate(route)]
 
     return data
-
-app = Flask(__name__)
-CORS(app)
-
-@app.route('/get_data', methods=['GET'])
-def get_dataframe():
-    return jsonify(df_2D.to_dict(orient='records'))
-
-
-@app.route('/get_clustered_data', methods=['POST'])
-def post_get_clustered_dataframe():
-    data = request.get_json()
-    n = data.get('n')
-    n = int(n)
-    cluster(n)
-    return jsonify(df_2D.to_dict(orient='records'))
-
-@app.route('/get_best_route', methods=['POST'])
-def post_tuples():
-    data = request.get_json()
-    n = data.get('n')
-    n = int(n)
-    res = get_best_route(n)
-    return jsonify(res)
-
-if __name__ == '__main__':
-    app.run(debug=False, port=8080)

@@ -28,7 +28,7 @@ class DataAgent:
     def __init__(self, df) -> None:
 
         model_name = 'llama3.2'
-        groq_model_name = 'mixtral-8x7b-32768'
+        groq_model_name = 'llama-3.1-70b-versatile'
         self.df = df
 
         engine = create_engine('sqlite:///bimbo.db')
@@ -132,13 +132,10 @@ class DataAgent:
         return res
     
     def ask_question(self, question):
-        print(self.schema)
         code = self.get_code(question)
         code = code.content
         code = re.sub(r'\\', '', code)
-        print(code)
         result = self.get_result(code)
-        print(result)
         human_result = self.humanize_result(question, result)
         self.add_to_memory(question, human_result, result)
         return human_result.content

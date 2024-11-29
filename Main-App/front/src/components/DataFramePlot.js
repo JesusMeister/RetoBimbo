@@ -83,6 +83,8 @@ const DataFramePlot = () => {
           titleside: 'right'
         }
       },
+      text: data.map(item => `Cantidad: ${item.Cantidad}`),
+      hoverinfo: 'text'
     }];
     setPlotData(newPlotData);
   }, [data]);
@@ -93,7 +95,7 @@ const DataFramePlot = () => {
       const trace = {
         x: route.map(item => item.Rack),
         y: route.map(item => item.Columna),
-        name: `Mejor Ruta Grupo ${routeNumber}`,
+        name: `Mejor Ruta Zona ${routeNumber}`,
         type: 'scatter',
         mode: 'lines+markers',
         marker: {
@@ -116,7 +118,7 @@ const DataFramePlot = () => {
         showlegend: true,
         type: 'scatter',
         mode: 'markers',
-        name: `Grupo ${cluster}`,
+        name: `Zona ${cluster}`,
         marker: {
           color: colorPalette[index % colorPalette.length],
           size: 8,
@@ -147,23 +149,23 @@ const DataFramePlot = () => {
   };
 
   const clusterNumberSlider = () => {
-    return <Slider min={1} max={data.length} title={"¿Cuantas personas van a realizar el conteo?"} onAccept={handleGetClusteredData}></Slider>
+    return <Slider min={1} max={data.length} title={"¿En cuantas zonas te gustaría dividir el almacén?"} onAccept={handleGetClusteredData}></Slider>
   }
 
   const routeNumberSlider = () => {
-    return <Slider min={1} max={clusterQuantities.length} title={"¿De que grupo te gustaría encontrar la ruta más corta?"} onAccept={handleGetBestRoute}></Slider>
+    return <Slider min={1} max={clusterQuantities.length} title={"¿De que Zona te gustaría encontrar la mejor ruta?"} onAccept={handleGetBestRoute}></Slider>
   }
 
   const table = (data) => {
     return (
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Cantidad total por grupo</h1>
+        <h1 className="text-2xl font-bold mb-4">Cantidad total por Zona</h1>
         <div className="overflow-auto max-h-64">
           <table className="min-w-full bg-white border border-gray-300">
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-4 py-2 text-left text-gray-700 border">Cantidad</th>
-                <th className="px-4 py-2 text-left text-gray-700 border">Grupo</th>
+                <th className="px-4 py-2 text-left text-gray-700 border">Zona</th>
               </tr>
             </thead>
             <tbody>
@@ -182,8 +184,9 @@ const DataFramePlot = () => {
 
   const Recorrido = (recorridoData) => {
     return (
-      <div className="flex flex-col items-center h-96 w-36 overflow-y-auto rounded-lg">
-        <h1 className='font-bold p-4'>Recorrido para grupo {routeNumber}</h1>
+      <div className="flex flex-col items-center h-96 w-36 rounded-lg">
+        <h1 className='font-bold p-4'>Recorrido para Zona {routeNumber}</h1>
+        <div className='overflow-y-auto '>
         {recorridoData.map((location, index) => (
           <div key={location.Index} className="flex items-center gap-4">
             <div className="flex flex-col items-center">
@@ -203,6 +206,7 @@ const DataFramePlot = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     );
   };

@@ -7,17 +7,21 @@ from oci.ai_vision.models import AnalyzeImageDetails, ImageTextDetectionFeature,
 import base64
 from oci.config import validate_config
 from flask import Flask, request, jsonify
+from dotenv import load_dotenv
 from flask_cors import CORS
 import io
+import os
+
+load_dotenv()
 
 def analyze_img_oci(image_array):
 
     config = {
-        'user': 'ocid1.user.oc1..aaaaaaaagmbp7qkvz4nd5ejwke64hy464ygkn6hkjrg4jqab3atkmglriyhq',
-        'region': 'mx-queretaro-1',
-        'tenancy': 'ocid1.tenancy.oc1..aaaaaaaafnp4ykozv2ffag4h3mmsefi7jihsx6sfxwuw3jsk42fmsb2jmiva',
-        'key_file': 'a01656699@tec.mx_2024-11-11T23_34_55.242Z.pem',
-        'fingerprint': 'e4:0b:a6:9a:be:08:47:56:f8:8a:bc:74:42:85:6f:87'
+        'user': os.getenv('user'),
+        'region': os.getenv('region'),
+        'tenancy': os.getenv('tenancy'),
+        'key_file': os.getenv('key_file'),
+        'fingerprint': os.getenv('fingerprint')
     }
 
     validate_config(config)

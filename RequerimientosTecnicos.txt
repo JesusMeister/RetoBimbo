@@ -9,9 +9,9 @@ Recomendado: 16 GB de RAM o más.
 3. Tarjeta Gráfica (GPU):
 Mínimo: NVIDIA GTX 1650 o similar.
 Recomendado: NVIDIA RTX 3060 o superior.
-5. Conexión a Internet:
+4. Conexión a Internet:
 Recomendación: Conexión de banda ancha estable.
-6. Sistema Operativo:
+5. Sistema Operativo:
 Recomendación:
 Windows 10/11, Linux (Ubuntu 20.04 o superior), o macOS actualizado.
 Motivo: Compatibilidad con las herramientas de desarrollo, bibliotecas y entornos necesarios para la implementación.
